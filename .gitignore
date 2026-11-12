@@ -1,0 +1,34 @@
+# ---------- Dependensi ----------
+node_modules/
+
+# ---------- Hasil build ----------
+dist/
+dist-ssr/
+build/
+
+# ---------- Rahasia: JANGAN pernah di-commit ----------
+# Alamat database dan kunci token disimpan di .env.
+# Yang di-commit hanya contohnya: backend/.env.example
+.env
+.env.*
+!.env.example
+
+# ---------- Berkas unggahan pengguna ----------
+# Foto listing, bukti transfer, dan foto destinasi hasil pemakaian aplikasi.
+uploads/
+uploads-test/
+
+# ---------- Log ----------
+logs
+*.log
+npm-debug.log*
+
+# ---------- Editor & sistem operasi ----------
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+
+# ---------- Perkakas lokal ----------
+.vibecode/
+.impeccable/

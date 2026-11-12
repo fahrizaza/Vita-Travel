@@ -1,0 +1,23 @@
+# Build output & dependencies
+dist/
+node_modules/
+package-lock.json
+
+# Original Webflow export, kept for reference only — JANGAN diformat ulang.
+legacy/
+
+# Static assets (images, icons, fonts)
+public/
+
+# Stylesheets exported by Webflow, kept byte-for-byte so the design stays identical.
+src/styles/webflow-shared.css
+src/styles/inter.css
+src/styles/app.css
+
+# Cache of the design-review plugin
+.impeccable/
+
+# Aplikasi Flutter (diformat dengan `dart format`) dan file upload backend
+mobile/
+backend/uploads/
+backend/uploads-test/
