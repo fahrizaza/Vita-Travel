@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vita Travel</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/images/webclip.png" />
+    <script>
+      // Webflow CSS keys off these classes on <html> (e.g. `.w-mod-touch`).
+      (function (root) {
+        root.className += " w-mod-js";
+        if ("ontouchstart" in window || (window.DocumentTouch && document instanceof DocumentTouch)) {
+          root.className += " w-mod-touch";
+        }
+      })(document.documentElement);
+    </script>
+  </head>
+  <body class="body">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
