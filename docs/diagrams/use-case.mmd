@@ -1,0 +1,65 @@
+flowchart LR
+    subgraph AKTOR["Aktor"]
+        direction TB
+        guest["Pengunjung<br/>(belum login)"]
+        buyer["Buyer"]
+        seller["Seller"]
+        admin["Admin"]
+    end
+
+    subgraph SIS["Sistem Vita Travel"]
+        direction TB
+        subgraph PUB["Akses publik"]
+            direction TB
+            p1(["Lihat dan cari listing"])
+            p2(["Lihat detail listing<br/>dan ulasan"])
+            p3(["Lihat kategori<br/>dan destinasi"])
+            p4(["Registrasi akun"])
+            p5(["Login"])
+        end
+        subgraph AKUN["Kelola akun"]
+            direction TB
+            k1(["Ubah profil"])
+            k2(["Ganti password"])
+        end
+        subgraph BUY["Khusus buyer"]
+            direction TB
+            b1(["Kelola favorit"])
+            b2(["Buat pesanan"])
+            b3(["Upload bukti transfer"])
+            b4(["Batalkan pesanan"])
+            b5(["Beri rating<br/>dan ulasan"])
+        end
+        subgraph SEL["Khusus seller"]
+            direction TB
+            s1(["Ajukan akun seller"])
+            s2(["Kelola profil usaha<br/>dan rekening"])
+            s3(["CRUD listing"])
+            s4(["Verifikasi bukti transfer"])
+            s5(["Tandai pesanan selesai"])
+            s6(["Lihat laporan penjualan"])
+        end
+        subgraph ADM["Khusus admin"]
+            direction TB
+            a1(["Verifikasi seller"])
+            a2(["Kelola kategori"])
+            a3(["Kelola destinasi"])
+            a4(["Moderasi listing"])
+            a5(["Kelola status user"])
+            a6(["Lihat dashboard"])
+        end
+    end
+
+    guest --> PUB
+    buyer --> PUB
+    buyer --> AKUN
+    buyer --> BUY
+    seller --> PUB
+    seller --> AKUN
+    seller --> SEL
+    admin --> PUB
+    admin --> AKUN
+    admin --> ADM
+
+    s3 -.->|"wajib sudah diverifikasi"| a1
+    a4 -.->|"menangguhkan"| p1
