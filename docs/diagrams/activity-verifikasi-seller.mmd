@@ -1,0 +1,15 @@
+flowchart TD
+    A([Mulai]) --> B[Calon seller mengisi<br/>form registrasi]
+    B --> C{Nama usaha dan<br/>kota terisi?}
+    C -- Tidak --> D[400 tampilkan<br/>error per field]
+    D --> B
+    C -- Ya --> E[Password di-hash<br/>bcrypt]
+    E --> F[(Simpan user role seller<br/>status pending)]
+    F --> G[Seller melengkapi<br/>profil usaha dan rekening]
+    G --> H[Ajukan verifikasi<br/>ke admin]
+    H --> I{Pengajuan<br/>disetujui?}
+    I -- Ditolak --> J[Isi alasan penolakan<br/>status rejected]
+    J --> G
+    I -- Disetujui --> K[(Status approved)]
+    K --> L[Dashboard seller terbuka,<br/>bisa CRUD listing]
+    L --> Z([Selesai])

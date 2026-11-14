@@ -1,0 +1,14 @@
+flowchart TD
+    A([Pesanan dibuat]) --> B[Buyer transfer manual<br/>ke rekening seller]
+    B --> C[Upload bukti transfer,<br/>nama pengirim, bank]
+    C --> D{File JPG/PNG/WEBP<br/>maks 2 MB?}
+    D -- Tidak --> E[415 atau 413<br/>upload ditolak]
+    E --> C
+    D -- Ya --> F[(Status menjadi<br/>waiting_verification)]
+    F --> G[Seller memeriksa<br/>bukti transfer]
+    G --> H{Bukti sesuai?}
+    H -- Tidak --> I[Isi alasan penolakan]
+    I --> J[(Status kembali<br/>pending_payment)]
+    J --> B
+    H -- Ya --> K[(Status confirmed)]
+    K --> Z([Lanjut ke pelaksanaan])

@@ -1,0 +1,10 @@
+flowchart TD
+    A([Pesanan confirmed]) --> B[Trip atau pemanduan<br/>berjalan]
+    B --> C[(Seller menandai<br/>status completed)]
+    C --> D[Buyer membuka<br/>detail pesanan]
+    D --> E[Isi rating 1-5<br/>dan ulasan]
+    E --> F{Sudah pernah<br/>mengulas?}
+    F -- Ya --> G[409 ulasan ganda]
+    G --> Z([Selesai])
+    F -- Tidak --> H[(Simpan ulasan<br/>dan rating)]
+    H --> Z

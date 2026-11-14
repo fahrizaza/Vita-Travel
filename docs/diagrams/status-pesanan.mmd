@@ -1,0 +1,10 @@
+stateDiagram-v2
+    [*] --> pending_payment
+    pending_payment --> waiting_verification: buyer upload bukti transfer
+    waiting_verification --> pending_payment: seller menolak, wajib isi alasan
+    waiting_verification --> confirmed: seller menyetujui bukti
+    confirmed --> completed: seller menandai layanan selesai
+    completed --> [*]: buyer memberi rating dan ulasan
+    pending_payment --> cancelled: buyer atau seller membatalkan
+    waiting_verification --> cancelled: buyer atau seller membatalkan
+    confirmed --> cancelled: seller membatalkan

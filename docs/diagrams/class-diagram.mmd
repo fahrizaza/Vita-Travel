@@ -1,0 +1,123 @@
+classDiagram
+    direction LR
+    class User {
+        +int id
+        +String name
+        +String email
+        +String password_hash
+        +String phone
+        +Role role
+        +Boolean is_active
+        +DateTime created_at
+        +register()
+        +login()
+        +updateProfile()
+        +changePassword()
+    }
+
+    class SellerProfile {
+        +int user_id
+        +String business_name
+        +String city
+        +String description
+        +String bank_name
+        +String bank_account_number
+        +String bank_account_name
+        +VerificationStatus verification_status
+        +String rejection_reason
+        +ajukan()
+        +verifikasi()
+    }
+
+    class Category {
+        +int id
+        +String name
+        +list()
+        +create()
+        +update()
+        +delete()
+    }
+
+    class Destination {
+        +int id
+        +String name
+        +String region
+        +String image_path
+        +list()
+        +create()
+        +update()
+        +delete()
+    }
+
+    class Listing {
+        +int id
+        +int seller_id
+        +int category_id
+        +int destination_id
+        +ListingType type
+        +String title
+        +String description
+        +Decimal price
+        +int quota
+        +Date start_date
+        +int duration_days
+        +String languages
+        +String includes
+        +String image_path
+        +ListingStatus status
+        +String moderation_note
+        +DateTime created_at
+        +sisaKuota()
+        +create()
+        +update()
+        +delete()
+        +moderasi()
+    }
+
+    class Booking {
+        +int id
+        +int buyer_id
+        +int listing_id
+        +Date service_date
+        +int days
+        +int participants
+        +Decimal total_price
+        +String note
+        +BookingStatus status
+        +String proof_path
+        +String sender_name
+        +String sender_bank
+        +String status_note
+        +DateTime created_at
+        +hitungTotal()
+        +uploadBukti()
+        +verifikasiPembayaran()
+        +selesaikan()
+        +batalkan()
+    }
+
+    class Review {
+        +int id
+        +int booking_id
+        +int rating
+        +String comment
+        +DateTime created_at
+        +create()
+    }
+
+    class Wishlist {
+        +int buyer_id
+        +int listing_id
+        +DateTime created_at
+        +toggle()
+    }
+
+    User "1" --> "0..1" SellerProfile : punya profil usaha
+    User "1" --> "0..*" Listing : menjual
+    User "1" --> "0..*" Booking : memesan
+    User "1" --> "0..*" Wishlist : menyimpan
+    Category "1" --> "0..*" Listing : mengelompokkan
+    Destination "1" --> "0..*" Listing : lokasi
+    Listing "1" --> "0..*" Booking : dipesan
+    Listing "1" --> "0..*" Wishlist : disimpan
+    Booking "1" --> "0..1" Review : diulas
