@@ -1,0 +1,57 @@
+name: vita_travel
+description: "Vita Travel — marketplace paket trip dan pemandu lokal"
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  http: ^1.6.0 # request ke REST API
+  http_parser: ^4.1.2 # tipe file saat upload gambar
+  image_picker: ^1.2.4 # pilih foto dari galeri / kamera
+  intl: ^0.20.2 # format Rupiah & tanggal Indonesia
+  lucide_icons_flutter: ^4.0.3 # set ikon
+  provider: ^6.1.5+1 # state management (sesi login & favorit)
+  shared_preferences: ^2.5.6 # menyimpan token login
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4 # membuat ikon app dari assets/icon
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+          weight: 700
+
+# Jalankan: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: assets/icon/app_icon.png
+  android: true
+  adaptive_icon_background: "#0D2E37"
+  adaptive_icon_foreground: assets/icon/app_icon_foreground.png
+  ios: true
+  remove_alpha_ios: true
+  web:
+    generate: true
+    background_color: "#0D2E37"
+    theme_color: "#0D2E37"
