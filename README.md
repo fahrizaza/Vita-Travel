@@ -7,10 +7,11 @@ Proyek Uji Level / AAS Ganjil RPL 2026/2027 (soal: `SOAL_AAS_KOKE_XI_RPL_2026_20
 
 | Folder                | Isi                                               | Teknologi                                                   |
 | --------------------- | ------------------------------------------------- | ----------------------------------------------------------- |
+| [`web/`](web)         | Website company profile                           | Vite 8, React 19, React Router, GSAP                        |
 | [`backend/`](backend) | REST API                                          | Node.js 22, Express 5, PostgreSQL, JWT, bcrypt, multer, zod |
 | [`mobile/`](mobile)   | Aplikasi mobile                                   | Flutter 3.44, Provider, http                                |
 | [`docs/`](docs)       | ERD, daftar endpoint, alur kerja, koleksi Postman |                                                             |
-| `src/`, `public/`     | Website company profile Vita Travel               | Vite + React                                                |
+| `legacy/`             | Ekspor Webflow asli, rujukan desain saja          |                                                             |
 
 ## Akun uji
 
@@ -62,7 +63,27 @@ contoh berada di server daring, bukan di laptop. Tiga hal yang perlu diketahui s
 Untuk kembali bekerja sepenuhnya di laptop, arahkan `DATABASE_URL` ke
 `postgres://localhost:5432/vita_travel`, lalu jalankan `npm run db:setup`.
 
-### 2. Aplikasi Flutter
+### 2. Website company profile
+
+Website berada di folder `web/` dan berdiri sendiri, terpisah dari backend maupun mobile.
+Seluruh perintahnya dijalankan dari dalam folder itu.
+
+```bash
+cd web
+npm install
+npm run dev                 # situs berjalan di http://localhost:5173
+npm run build               # hasil build ke web/dist/
+npm run lint                # oxlint
+npm run format:check        # memeriksa format tanpa mengubah berkas
+```
+
+Situs sudah disebarkan dan dapat dibuka di **https://vita-travel.netlify.app**.
+
+Berkas `netlify.toml` sengaja **tetap berada di akar proyek**, bukan ikut ke dalam `web/`: Netlify
+mencari konfigurasi di akar repositori, dan di dalamnya path-nya ditulis relatif terhadap akar
+(`cd web && npm run build`, `publish = "web/dist"`).
+
+### 3. Aplikasi Flutter
 
 ```bash
 cd mobile
@@ -79,11 +100,12 @@ HP fisik dan laptop harus berada di jaringan Wi-Fi yang sama. IP laptop bisa dil
 APK untuk dipasang di HP: `flutter build apk --dart-define=API_URL=http://IP-LAPTOP:3001/api`
 → hasil di `mobile/build/app/outputs/flutter-apk/`.
 
-### 3. Test otomatis
+### 4. Test otomatis
 
 ```bash
 cd backend && npm test      # 22 test API: auth, role, validasi, upload, alur pesanan
 cd mobile && flutter test   # validator, format, pengalihan role, form login, dialog hapus
+cd web && npm run lint      # oxlint pada kode website
 ```
 
 ## Pemenuhan soal

@@ -1,23 +1,34 @@
-# Build output & dependencies
-dist/
+# Berkas ini dibaca saat Prettier dijalankan DARI AKAR proyek — misalnya oleh editor yang
+# membuka folder PRELOVE, atau perintah `npx prettier` dari sini.
+#
+# Penting: Prettier mencari daftar abaikan ini relatif terhadap folder tempat ia DIJALANKAN,
+# bukan dengan menelusuri ke atas seperti pencarian berkas konfigurasi. Karena perintah
+# `npm run format` website dijalankan dari dalam web/, di sana ada berkas terpisah
+# web/.prettierignore. Keduanya perlu ada; mengubah salah satu tidak mengubah yang lain.
+#
+# Pola di bawah relatif terhadap AKAR proyek.
+
+# ---------- Arsip dan modul lain ----------
+# legacy/ sengaja dibiarkan apa adanya sebagai rujukan desain; mobile/ diformat dengan
+# `dart format`, bukan Prettier; berkas unggahan berisi data pengguna, bukan kode.
+legacy/
+mobile/
+.impeccable/
+backend/uploads/
+backend/uploads-test/
+
+# ---------- Hasil build & dependensi ----------
+web/dist/
 node_modules/
 package-lock.json
 
-# Original Webflow export, kept for reference only — JANGAN diformat ulang.
-legacy/
+# ---------- Aset statis website ----------
+# Gambar, ikon, dan font: isinya biner, tidak ada yang perlu diformat.
+web/public/
 
-# Static assets (images, icons, fonts)
-public/
-
-# Stylesheets exported by Webflow, kept byte-for-byte so the design stays identical.
-src/styles/webflow-shared.css
-src/styles/inter.css
-src/styles/app.css
-
-# Cache of the design-review plugin
-.impeccable/
-
-# Aplikasi Flutter (diformat dengan `dart format`) dan file upload backend
-mobile/
-backend/uploads/
-backend/uploads-test/
+# ---------- Gaya hasil ekspor Webflow ----------
+# Ketiga berkas ini wajib tetap byte-for-byte agar tampilan desain tidak bergeser.
+# Perbedaan satu spasi pada CSS ekspor Webflow pernah cukup untuk menggeser tata letak.
+web/src/styles/webflow-shared.css
+web/src/styles/inter.css
+web/src/styles/app.css

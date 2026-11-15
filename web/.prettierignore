@@ -1,0 +1,24 @@
+# Berkas ini dibaca saat Prettier dijalankan DARI DALAM web/ — yaitu oleh `npm run format`
+# dan `npm run format:check`. Polanya relatif terhadap folder web/ ini.
+#
+# Mengapa terpisah dari .prettierignore di akar proyek: Prettier mencari daftar abaikan
+# relatif terhadap folder tempat ia dijalankan, sehingga berkas di akar TIDAK terbaca dari
+# sini. Sebelumnya hanya ada satu berkas di akar, dan akibatnya proteksi di bawah ini bocor
+# tanpa peringatan apa pun saat perintah dijalankan dari web/.
+
+# ---------- Hasil build & dependensi ----------
+dist/
+node_modules/
+package-lock.json
+
+# ---------- Aset statis ----------
+# Gambar, ikon, dan font: isinya biner, tidak ada yang perlu diformat.
+public/
+
+# ---------- Berkas yang JANGAN diformat ----------
+# Ketiga gaya hasil ekspor Webflow ini wajib tetap byte-for-byte agar tampilan desain tidak
+# bergeser. JANGAN dihapus dari daftar ini meski isinya terlihat bisa dirapikan: perbedaan
+# satu spasi pada CSS ekspor Webflow pernah cukup untuk menggeser tata letak.
+src/styles/webflow-shared.css
+src/styles/inter.css
+src/styles/app.css

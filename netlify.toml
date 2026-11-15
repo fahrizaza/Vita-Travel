@@ -3,9 +3,12 @@
 # Berkas ini dibaca Netlify saat membangun dan menyajikan situs, baik ketika
 # penyebaran dijalankan dari CLI maupun ketika repositori terhubung langsung.
 
+# Sejak website dipindahkan ke folder web/, berkas ini tetap berada di AKAR repositori
+# karena Netlify mencari konfigurasinya di sana ketika repositori dihubungkan langsung.
+# Karena itu seluruh path di bawah ditulis relatif terhadap akar, bukan terhadap web/.
 [build]
-  command = "npm run build"
-  publish = "dist"
+  command = "cd web && npm install && npm run build"
+  publish = "web/dist"
 
 # Aplikasi ini memakai pengetesan rute di sisi klien (React Router): alamat seperti
 # /retreat atau /bali tidak punya berkasnya sendiri di folder hasil build. Tanpa
