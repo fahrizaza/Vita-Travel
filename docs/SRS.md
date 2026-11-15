@@ -16,8 +16,9 @@
 | Bentuk Soal | Individu |
 | Penyusun | Fahri |
 | Tanggal Penyusunan | 15 November 2026 |
-| Versi Dokumen | 1.2 |
+| Versi Dokumen | 1.3 |
 | Repositori | `https://github.com/fahrizaza/Vita-Travel` |
+| Website Daring | `https://vita-travel.netlify.app` (rincian pada Bab IV.5.5) |
 | Basis Data Daring | Aiven for PostgreSQL (rincian pada Bab IV.5.3) |
 
 ---
@@ -171,7 +172,8 @@ benar-benar sesuai.
 | 11 | Dokumentasi | Penyusunan dokumen SRS ini | 14 Nov 2026 | 14 Nov 2026 | 1 hari | Selesai |
 | 12 | Pengelolaan versi | Inisialisasi repositori Git dan penyusunan cabang | 15 Nov 2026 | 15 Nov 2026 | 1 hari | Selesai |
 | 13 | Penyebaran | Deploy basis data ke Aiven | 15 Nov 2026 | 15 Nov 2026 | 1 hari | Selesai |
-| 14 | Penyebaran | Deploy website dan REST API ke layanan daring | — | — | — | Belum dijalankan |
+| 14 | Penyebaran | Deploy website ke Netlify | 15 Nov 2026 | 15 Nov 2026 | 1 hari | Selesai |
+| 15 | Penyebaran | Deploy REST API dan aplikasi mobile | — | — | — | Belum dijalankan |
 
 ### 2.2.3 Catatan Pelaksanaan
 
@@ -182,9 +184,11 @@ penyusunan repositori Git pada 15 November 2026. Karena pengerjaan bersifat iter
 tidak menunggu seluruh implementasi selesai: setiap modul diuji begitu modul tersebut selesai
 dikerjakan.
 
-Baris 13 berstatus **selesai** karena basis data memang sudah berjalan di Aiven dan sudah diuji
-sambungan serta isinya. Baris 14 sengaja dibiarkan berstatus **belum dijalankan** agar pembaca dokumen
-dapat melihat bahwa satu tahap masih terbuka, bukan menghilangkannya dari rencana.
+Baris 13 dan 14 berstatus **selesai** karena basis data sudah berjalan di Aiven dan website sudah
+berjalan di Netlify; keduanya diuji dengan cara yang berbeda sesuai sifatnya — basis data diperiksa
+isinya, website diperiksa tampilannya di peramban. Baris 15 sengaja dibiarkan berstatus **belum
+dijalankan** agar pembaca dokumen dapat melihat bahwa tahap penyebaran belum seluruhnya tertutup,
+bukan menghilangkannya dari rencana.
 
 ---
 
@@ -1432,24 +1436,28 @@ komponen.
 | --- | --- | --- |
 | Repositori Git | **Selesai** | `https://github.com/fahrizaza/Vita-Travel`, bercabang menurut modul, rincian pada Bab IV.5.7 |
 | Basis data PostgreSQL | **Selesai** | Berjalan di Aiven, sudah diuji sambungan dan isinya, rincian pada Bab IV.5.3 |
+| Website company profile | **Selesai** | Berjalan di `https://vita-travel.netlify.app`, sudah diuji seluruh halamannya, rincian pada Bab IV.5.5 |
 | REST API | Belum | Masih berjalan di komputer pengembangan (`http://localhost:3001/api`) |
-| Website company profile | Belum | Berkas konfigurasi penyebaran (`vercel.json`, `netlify.toml`) belum dibuat |
 | Aplikasi mobile | Belum | APK belum dibangun dengan alamat API daring |
 
-Karena itu, subbab 4.5.4 sampai 4.5.6 masih berisi **rancangan langkah penyebaran**, sedangkan subbab
-4.5.3 sudah berisi **hasil yang benar-benar dikerjakan** beserta bukti pengujiannya. Subbab yang masih
-berisi rancangan akan diperbarui dengan URL dan tangkapan layar setelah dikerjakan.
+Karena itu, subbab 4.5.4 dan 4.5.6 masih berisi **rancangan langkah penyebaran**, sedangkan subbab
+4.5.3 dan 4.5.5 sudah berisi **hasil yang benar-benar dikerjakan** beserta bukti pengujiannya. Subbab
+yang masih berisi rancangan akan diperbarui dengan cara yang sama setelah dikerjakan.
+
+Pembagian ini sesuai ketentuan soal, yang menyebut dua penyebaran secara khusus: **website ke
+Vercel/Netlify** dan **basis data ke Aiven**. Keduanya sudah selesai. Penyebaran REST API dan aplikasi
+mobile dikerjakan sebagai kelanjutan, bukan sebagai syarat soal.
 
 ### 4.5.2 Rancangan Arsitektur Deployment
 
-| Komponen | Layanan yang Direncanakan | Alasan Pemilihan |
-| --- | --- | --- |
-| Website company profile | Vercel atau Netlify | Keduanya menangani aplikasi statis hasil build Vite secara otomatis, menyediakan HTTPS, dan terhubung langsung ke repositori Git. |
-| REST API | Vercel (serverless) atau Render | Menjalankan aplikasi Node.js tanpa mengelola server sendiri. |
-| Basis data PostgreSQL | Aiven | Menyediakan PostgreSQL terkelola dengan pencadangan otomatis, dapat diakses dari luar jaringan lokal. |
-| Aplikasi mobile | Build APK atau Flutter web | Dibagikan langsung atau di-host sebagai aplikasi web. |
+| Komponen | Layanan yang Direncanakan | Layanan yang Dipakai | Alasan Pemilihan |
+| --- | --- | --- | --- |
+| Website company profile | Vercel atau Netlify | **Netlify** | Keduanya menangani aplikasi statis hasil build Vite secara otomatis, menyediakan HTTPS, dan terhubung langsung ke repositori Git. Netlify dipilih karena perkakas baris perintahnya sudah tersedia dan sudah tertaut pada akun yang dipakai. |
+| Basis data PostgreSQL | Aiven | **Aiven** | Menyediakan PostgreSQL terkelola dengan pencadangan otomatis, dapat diakses dari luar jaringan lokal. |
+| REST API | Vercel (serverless) atau Render | *belum* | Menjalankan aplikasi Node.js tanpa mengelola server sendiri. |
+| Aplikasi mobile | Build APK atau Flutter web | *belum* | Dibagikan langsung atau di-host sebagai aplikasi web. |
 
-Baris basis data pada tabel di atas sudah terwujud; baris lainnya masih berupa rencana.
+Baris website dan basis data pada tabel di atas sudah terwujud; dua baris lainnya masih berupa rencana.
 
 ### 4.5.3 Penyebaran Basis Data ke Aiven (Sudah Dikerjakan)
 
@@ -1532,15 +1540,59 @@ Catatan penting: berkas gambar yang diunggah disimpan pada sistem berkas server.
 serverless, sistem berkas bersifat sementara sehingga berkas dapat hilang setiap proses dimulai ulang.
 Untuk sistem yang berjalan sesungguhnya, folder unggahan perlu dipindahkan ke layanan penyimpanan objek.
 
-### 4.5.5 Langkah Deploy Website
+### 4.5.5 Penyebaran Website ke Netlify (Sudah Dikerjakan)
 
-1. Menghubungkan repositori yang sama ke Vercel atau Netlify.
-2. Menentukan **root** penyebaran sebagai akar proyek dengan perintah build `npm run build` dan folder
-   keluaran `dist`.
-3. Menambahkan aturan penulisan ulang agar seluruh alamat diarahkan ke `index.html`, sebab aplikasi
-   web memakai pengetesan rute di sisi klien. Tanpa aturan ini, membuka alamat halaman secara langsung
-   akan menghasilkan 404.
-4. Menjalankan penyebaran dan memastikan seluruh 11 halaman dapat dibuka.
+Website company profile sudah berjalan di **`https://vita-travel.netlify.app`** dan dapat dibuka
+siapa saja tanpa menjalankan apa pun di komputer pengembangan.
+
+**A. Berkas konfigurasi penyebaran**
+
+| Berkas | Isi | Alasan |
+| --- | --- | --- |
+| `netlify.toml` | Perintah `npm run build`, folder terbit `dist`, aturan pengalihan, aturan cache | Dibaca Netlify saat membangun dan menyajikan situs |
+| `public/_redirects` | `/*  /index.html  200` | Disalin Vite ke `dist/`, sehingga aturan pengalihan tetap ikut meski penyebaran dijalankan dari akar yang berbeda |
+
+**B. Langkah yang dikerjakan**
+
+1. Membangun situs lebih dulu di komputer (`npm run build`) untuk memastikan tidak ada galat sebelum
+   dikirim, lalu memastikan folder `dist/` berisi 170 berkas termasuk `index.html`.
+2. Membuat proyek Netlify bernama `vita-travel` pada akun yang sudah tertaut, sehingga alamatnya
+   menjadi `https://vita-travel.netlify.app`.
+3. Menjalankan `netlify deploy --prod --dir=dist`. Netlify mengunggah 144 berkas dan melaporkan
+   penyebaran berhasil.
+4. Memeriksa hasilnya dari luar: seluruh alamat halaman dibuka satu per satu, lalu isi setiap halaman
+   diukur di peramban — bukan sekadar melihat kode balasan.
+
+**C. Kendala yang diantisipasi: halaman 404 saat alamat dibuka langsung**
+
+Aplikasi web ini memakai React Router, yang memindahkan halaman **di sisi peramban**. Alamat seperti
+`/retreat` atau `/bali` karena itu tidak punya berkasnya sendiri di folder hasil build — yang ada hanya
+`index.html`. Bila tidak diatur, membuka alamat tersebut secara langsung (atau menyegarkan halaman pada
+alamat itu) akan dijawab 404 oleh server, padahal halamannya jelas ada di dalam aplikasi.
+
+Penyelesaiannya, seluruh alamat diarahkan ke `index.html` dengan kode **200**, bukan 301. Pilihan kode
+status itu disengaja: kode 301 akan mengubah alamat yang terlihat di bilah peramban, sehingga pengunjung
+yang membuka `/retreat` malah berpindah ke alamat akar dan halaman yang ingin dibagikan kehilangan
+alamatnya.
+
+**D. Bukti penyebaran**
+
+| Pemeriksaan | Hasil |
+| --- | --- |
+| Alamat produksi | `https://vita-travel.netlify.app` (HTTPS, dilayani Netlify) |
+| Halaman utama | 200 |
+| Seluruh 10 alamat halaman | 200, termasuk `/retreat`, `/bali`, `/morocco`, `/coaches`, `/contacts` |
+| Alamat yang tidak ada | 200, lalu menampilkan halaman "Page not found" buatan aplikasi — bukan halaman galat bawaan server |
+| Aset (favicon, gambar, JS, CSS) | Seluruhnya termuat, tidak ada yang gagal |
+| Isi halaman diukur di peramban | 524 elemen dan 4.852 huruf pada `/retreat`; 505 elemen pada `/bali` |
+| Gambar | 24 gambar pada `/retreat` dan 23 pada `/bali`, tidak ada yang rusak |
+| Galat JavaScript | Tidak ada |
+
+Pengukuran isi halaman itu penting dan disengaja: berkas JavaScript yang menerima kode 200 tetap dapat
+gagal dijalankan di peramban, dan kegagalan seperti itu hanya terlihat sebagai halaman kosong — bukan
+sebagai kode galat apa pun. Karena itu halaman tidak hanya diambil kode balasannya, melainkan benar-benar
+dibuka di peramban lalu diukur banyak elemen, panjang teks, tinggi halaman, jumlah gambar, dan galat
+konsolnya.
 
 ### 4.5.6 Langkah Deploy Aplikasi Mobile
 
@@ -1799,20 +1851,23 @@ diperbarui dan dibangkitkan ulang bila rancangan berubah.
 | 26 | Rancangan arsitektur deployment | Bab IV.5.2 |
 | 27 | Data layanan basis data Aiven | Bab IV.5.3 |
 | 28 | Bukti sambungan dan isi basis data Aiven | Bab IV.5.3 |
-| 29 | Struktur cabang Git dan berkas yang dikecualikan | Bab IV.5.7 |
-| 30 | Tautan repositori dan hasil deploy | Bab V.2.5 |
+| 29 | Berkas konfigurasi penyebaran website | Bab IV.5.5 |
+| 30 | Bukti penyebaran website | Bab IV.5.5 |
+| 31 | Struktur cabang Git dan berkas yang dikecualikan | Bab IV.5.7 |
+| 32 | Tautan repositori dan hasil deploy | Bab V.2.5 |
 
 ### 5.2.5 Tautan dan Rujukan
 
 | Item | Keterangan |
 | --- | --- |
 | Repositori GitHub | `https://github.com/fahrizaza/Vita-Travel` (publik) |
-| Versi terilis | `v1.0.0` untuk sistem, `v1.1.0` untuk dokumen SRS, `v1.2.0` untuk penyebaran basis data ke Aiven |
-| Cabang | `main`, `develop`, `feature/website-profil`, `feature/backend-api`, `feature/mobile-app`, `feature/dokumentasi`, `feature/database-aiven`, serta cabang `fix/*` untuk perbaikan |
-| Alamat website hasil deploy | *Belum tersedia — penyebaran belum dikerjakan* |
+| Versi terilis | `v1.0.0` sistem, `v1.1.0` dokumen, `v1.2.0` basis data Aiven, `v1.3.0` penyebaran website |
+| Cabang | `main`, `develop`, `feature/website-profil`, `feature/backend-api`, `feature/mobile-app`, `feature/dokumentasi`, `feature/database-aiven`, `feature/deploy-website`, serta cabang `fix/*` untuk perbaikan |
+| **Alamat website (daring)** | **`https://vita-travel.netlify.app`** — sudah berjalan, seluruh halaman diuji |
 | Alamat API hasil deploy | *Belum tersedia — masih berjalan di `http://localhost:3001/api`* |
 | Host basis data | `pg-23410fb1-ghiffary-a1c7.a.aivencloud.com:10504`, database `vita_travel` (Aiven, PostgreSQL 18.7) |
 | Sertifikat CA basis data | `backend/certs/aiven-ca.pem` |
+| Berkas konfigurasi penyebaran | `netlify.toml`, `public/_redirects` |
 | Dokumentasi API | `docs/API.md` |
 | Koleksi Postman | `docs/vita-travel.postman_collection.json` |
 | Dokumentasi basis data | `docs/ERD.md` |
@@ -1823,7 +1878,9 @@ diperbarui dan dibangkitkan ulang bila rancangan berubah.
 ### 5.2.6 Tangkapan Layar Antarmuka
 
 Tangkapan layar berikut diambil langsung dari aplikasi yang berjalan, bukan dari rancangan.
-Aplikasi mobile diambil pada ukuran layar telefon 390 × 844 piksel, website pada lebar 1440 piksel.
+Aplikasi mobile diambil pada ukuran layar telefon 390 × 844 piksel. Website diambil pada lebar 1440
+piksel dari situs yang sudah disebarkan, yaitu `https://vita-travel.netlify.app`, sehingga yang
+terlihat pada gambar benar-benar halaman yang dapat dibuka penguji.
 
 **A. Aplikasi Mobile**
 

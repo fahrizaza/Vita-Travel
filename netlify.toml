@@ -1,0 +1,27 @@
+# Konfigurasi penyebaran website Vita Travel ke Netlify.
+#
+# Berkas ini dibaca Netlify saat membangun dan menyajikan situs, baik ketika
+# penyebaran dijalankan dari CLI maupun ketika repositori terhubung langsung.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Aplikasi ini memakai pengetesan rute di sisi klien (React Router): alamat seperti
+# /retreat atau /bali tidak punya berkasnya sendiri di folder hasil build. Tanpa
+# aturan di bawah, membuka alamat tersebut secara langsung — atau menyegarkan
+# halaman pada alamat itu — akan dijawab 404 oleh server Netlify karena berkasnya
+# memang tidak ada, padahal halamannya jelas ada di dalam aplikasi.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Berkas hasil build Vite diberi sidik jari pada namanya (misalnya index-a1b2c3d4.js),
+# sehingga isinya tidak pernah berubah untuk nama yang sama. Karena itu berkas tersebut
+# boleh disimpan lama di peramban; halaman HTML sendiri tidak, agar pembaruan situs
+# langsung terlihat saat pengunjung membuka ulang.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
