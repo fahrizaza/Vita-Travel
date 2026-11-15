@@ -1,0 +1,10 @@
+/* Page-level tweaks that must load after app.css. */
+.footer__copy .button-sm {
+  line-height: 125%;
+}
+
+@media screen and (max-width: 479px) {
+  .h4 {
+    line-height: 125%;
+  }
+}
