@@ -45,6 +45,23 @@ npm run dev                 # API berjalan di http://localhost:3001/api
 Jika PostgreSQL memakai user/password, tulis di `.env`, contoh:
 `DATABASE_URL=postgres://postgres:rahasia@localhost:5432/vita_travel`.
 
+### Memakai basis data Aiven (basis data daring)
+
+Berkas `.env` pada proyek ini sudah diarahkan ke **Aiven for PostgreSQL**, sehingga tabel dan data
+contoh berada di server daring, bukan di laptop. Tiga hal yang perlu diketahui sebelum mengubahnya:
+
+- `DATABASE_URL` berisi Service URI dari halaman layanan Aiven. Bila menyalin ulang dari halaman itu,
+  **hapus** parameter `?sslmode=require` yang ikut tersalin. Pada `pg-connection-string` versi 2,
+  parameter tersebut menimpa pengaturan SSL aplikasi sehingga sertifikat Aiven justru ditolak dengan
+  pesan `self-signed certificate in certificate chain`.
+- Sertifikat CA Aiven disimpan di [`backend/certs/aiven-ca.pem`](backend/certs) dan diteruskan ke driver
+  `pg` sebagai `ssl.ca`. Cara mengunduh ulang sertifikat itu ada di `backend/certs/README.md`.
+- `TEST_DATABASE_URL` sengaja tetap menunjuk PostgreSQL lokal, supaya `npm test` tidak pernah menghapus
+  isi basis data daring.
+
+Untuk kembali bekerja sepenuhnya di laptop, arahkan `DATABASE_URL` ke
+`postgres://localhost:5432/vita_travel`, lalu jalankan `npm run db:setup`.
+
 ### 2. Aplikasi Flutter
 
 ```bash
