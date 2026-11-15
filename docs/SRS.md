@@ -16,7 +16,7 @@
 | Bentuk Soal | Individu |
 | Penyusun | Fahri |
 | Tanggal Penyusunan | 15 November 2026 |
-| Versi Dokumen | 1.3 |
+| Versi Dokumen | 1.4 |
 | Repositori | `https://github.com/fahrizaza/Vita-Travel` |
 | Website Daring | `https://vita-travel.netlify.app` (rincian pada Bab IV.5.5) |
 | Basis Data Daring | Aiven for PostgreSQL (rincian pada Bab IV.5.3) |
@@ -174,6 +174,7 @@ benar-benar sesuai.
 | 13 | Penyebaran | Deploy basis data ke Aiven | 15 Nov 2026 | 15 Nov 2026 | 1 hari | Selesai |
 | 14 | Penyebaran | Deploy website ke Netlify | 15 Nov 2026 | 15 Nov 2026 | 1 hari | Selesai |
 | 15 | Penyebaran | Deploy REST API dan aplikasi mobile | — | — | — | Belum dijalankan |
+| 16 | Penyempurnaan | Penataan ulang struktur: website dipindahkan ke folder `web/` | 15 Nov 2026 | 15 Nov 2026 | 1 hari | Selesai |
 
 ### 2.2.3 Catatan Pelaksanaan
 
@@ -1183,6 +1184,19 @@ CREATE TABLE wishlists (
 
 ```
 PRELOVE/
+├── web/                         Website company profile (Vite + React)
+│   ├── src/                     Kode sumber website
+│   │   ├── components/          Header, footer, kartu listing, carousel, tombol
+│   │   ├── pages/               Halaman home dan halaman paket perjalanan
+│   │   ├── animations/          Animasi GSAP
+│   │   ├── data/                Isi paket perjalanan dan daftar pemandu
+│   │   ├── router.jsx           Peta alamat ke halaman
+│   │   └── styles/              CSS: tema, tipografi, dan gaya komponen
+│   ├── public/                  Gambar, ikon, dan font yang dilayani apa adanya
+│   ├── index.html               Berkas HTML induk
+│   ├── vite.config.js           Konfigurasi build dan pemecahan berkas vendor
+│   ├── package.json             Dependensi dan perintah npm website
+│   └── .prettierignore          Berkas yang dikecualikan dari pemformatan
 ├── backend/                     REST API (Node.js + Express + PostgreSQL)
 │   ├── database/
 │   │   ├── schema.sql           DDL: tabel, ENUM, PK, FK, CHECK
@@ -1215,13 +1229,6 @@ PRELOVE/
 │   │   ├── utils/               Validator dan pemformatan Rupiah serta tanggal
 │   │   └── widgets/             Komponen yang dipakai berulang (11 berkas)
 │   └── test/app_test.dart       Uji widget dan logika (10 kasus)
-├── src/                         Website company profile (Vite + React)
-│   ├── components/              Header, footer, kartu listing, carousel, tombol
-│   ├── pages/                   Halaman home dan halaman paket perjalanan
-│   ├── animations/              Animasi GSAP
-│   ├── router.jsx               Peta alamat ke halaman
-│   └── styles/                  CSS: tema, tipografi, dan gaya komponen
-├── public/                      Gambar, ikon, dan font website
 ├── legacy/                      Ekspor Webflow asli, disimpan sebagai rujukan desain
 │   ├── html/, css/, js/         Halaman, gaya, dan skrip hasil ekspor
 │   └── assets/                  Gambar, ikon, dan font hasil ekspor
@@ -1236,8 +1243,11 @@ PRELOVE/
 │   ├── screenshots/             Tangkapan layar aplikasi dan website untuk lampiran
 │   ├── tools/md_to_docx.py      Membangkitkan DOCX dari SRS.md
 │   └── vita-travel.postman_collection.json
+├── netlify.toml                 Konfigurasi penyebaran website, dibaca dari akar repositori
 ├── README.md                    Cara menjalankan dan akun uji
 ├── .gitignore                   Berkas yang tidak ikut ke repositori
+├── .prettierrc.json             Aturan pemformatan kode
+├── .prettierignore              Berkas yang dikecualikan dari pemformatan
 └── SOAL_AAS_KOKE_XI_RPL_2026_2027.docx
 ```
 
@@ -1247,7 +1257,7 @@ PRELOVE/
 | --- | --- | --- | --- |
 | Backend (`backend/src`) | 27 | ± 1.700 | 8 controller, 8 route, 4 middleware |
 | Aplikasi mobile (`mobile/lib`) | 56 | ± 7.700 | 26 halaman, 11 komponen, 6 layanan |
-| Website (`src`) | 61 | ± 15.000 | 61 berkas komponen, halaman, dan gaya |
+| Website (`web/src`) | 61 | ± 15.000 | 61 berkas komponen, halaman, dan gaya |
 | Basis data | 3 | ± 700 | 1 skema DDL dan 2 berkas data |
 | Pengujian | 2 | ± 520 | 22 uji API dan 10 uji mobile |
 | **Total kode program** | **149** | **± 25.600** | Belum termasuk berkas pendukung |
@@ -1264,9 +1274,23 @@ cukup ditulis sekali sebagai middleware, bukan diulang di setiap pengendali.
 `seller`, `admin`, dan `shared`. Pembagian ini memudahkan pencarian: halaman yang hanya dipakai satu
 peran tidak bercampur dengan halaman yang dipakai bersama.
 
-**Pemisahan data dari tampilan pada website.** Isi paket perjalanan disimpan pada `src/data/` sebagai
-data terstruktur, sedangkan halaman hanya bertugas menampilkannya. Menambah atau mengubah paket tidak
-memerlukan perubahan pada berkas halaman.
+**Pemisahan data dari tampilan pada website.** Isi paket perjalanan disimpan pada `web/src/data/`
+sebagai data terstruktur, sedangkan halaman hanya bertugas menampilkannya. Menambah atau mengubah paket
+tidak memerlukan perubahan pada berkas halaman.
+
+**Pemisahan tiga modul pada akar proyek.** Sejak penataan ulang, akar proyek hanya memuat tiga modul
+yang setara — `web/`, `backend/`, dan `mobile/` — ditambah `docs/` dan `legacy/`. Sebelumnya seluruh
+berkas website (`src/`, `public/`, `index.html`, `package.json`, `vite.config.js`) berbaur dengan folder
+modul lain di akar, sehingga sulit dibedakan mana berkas website dan mana berkas proyek. Pemisahan ini
+membuat setiap modul dapat dipasang, dijalankan, dan diuji sendiri: `web/` dengan `npm`, `backend/`
+dengan `npm`, dan `mobile/` dengan `flutter`, tanpa saling mengganggu.
+
+Dua berkas konfigurasi sengaja **tetap di akar** meski berkaitan dengan website:
+
+| Berkas | Alasan tetap di akar |
+| --- | --- |
+| `netlify.toml` | Netlify mencari konfigurasi penyebaran di akar repositori, sehingga path di dalamnya ditulis relatif terhadap akar (`cd web && npm run build`, `publish = "web/dist"`). |
+| `.prettierignore` | Berlaku untuk seluruh repositori, mencakup kode website maupun backend dan berkas arsip. Karena Prettier mencari daftar abaikan relatif terhadap folder tempat perintah dijalankan, berkas terpisah `web/.prettierignore` juga disediakan agar perintah dari dalam `web/` tetap menghormatinya. |
 
 **Penamaan berkas yang menggambarkan isi.** Seluruh berkas diberi nama menurut fungsinya, misalnya
 `booking.controller.js`, `listing_detail_screen.dart`, dan `retreat-card.jsx`. Tidak ada berkas yang
@@ -1549,17 +1573,17 @@ siapa saja tanpa menjalankan apa pun di komputer pengembangan.
 
 | Berkas | Isi | Alasan |
 | --- | --- | --- |
-| `netlify.toml` | Perintah `npm run build`, folder terbit `dist`, aturan pengalihan, aturan cache | Dibaca Netlify saat membangun dan menyajikan situs |
-| `public/_redirects` | `/*  /index.html  200` | Disalin Vite ke `dist/`, sehingga aturan pengalihan tetap ikut meski penyebaran dijalankan dari akar yang berbeda |
+| `netlify.toml` (akar proyek) | Perintah `cd web && npm install && npm run build`, folder terbit `web/dist`, aturan pengalihan, aturan cache | Dibaca Netlify saat membangun dan menyajikan situs. Berkas ini tetap di akar karena Netlify mencarinya di sana; karena itu path di dalamnya relatif terhadap akar, bukan terhadap `web/`. |
+| `web/public/_redirects` | `/*  /index.html  200` | Disalin Vite ke `web/dist/`, sehingga aturan pengalihan tetap ikut pada setiap penyebaran |
 
 **B. Langkah yang dikerjakan**
 
-1. Membangun situs lebih dulu di komputer (`npm run build`) untuk memastikan tidak ada galat sebelum
-   dikirim, lalu memastikan folder `dist/` berisi 170 berkas termasuk `index.html`.
+1. Membangun situs lebih dulu di komputer (`cd web && npm run build`) untuk memastikan tidak ada galat
+   sebelum dikirim, lalu memastikan folder `web/dist/` berisi 171 berkas termasuk `index.html`.
 2. Membuat proyek Netlify bernama `vita-travel` pada akun yang sudah tertaut, sehingga alamatnya
    menjadi `https://vita-travel.netlify.app`.
-3. Menjalankan `netlify deploy --prod --dir=dist`. Netlify mengunggah 144 berkas dan melaporkan
-   penyebaran berhasil.
+3. Menjalankan `netlify deploy --prod` dari akar proyek. Netlify membaca `netlify.toml`, membangun situs
+   dari `web/`, mengunggah hasilnya, dan melaporkan penyebaran berhasil.
 4. Memeriksa hasilnya dari luar: seluruh alamat halaman dibuka satu per satu, lalu isi setiap halaman
    diukur di peramban — bukan sekadar melihat kode balasan.
 
@@ -1614,7 +1638,7 @@ proyek: **`https://github.com/fahrizaza/Vita-Travel`** (publik).
 | --- | --- | --- |
 | `main` | Versi stabil dan siap diserahkan | Seluruh sistem, ditandai penanda versi `v1.0.0` |
 | `develop` | Penggabungan seluruh fitur sebelum masuk `main` | Seluruh sistem, titik lanjut pengerjaan berikutnya |
-| `feature/website-profil` | Pengerjaan website company profile | `src/`, `public/`, `legacy/`, berkas Vite |
+| `feature/website-profil` | Pengerjaan website company profile | `web/`, `legacy/` |
 | `feature/backend-api` | Pengerjaan REST API dan basis data | `backend/` |
 | `feature/mobile-app` | Pengerjaan aplikasi Flutter | `mobile/` |
 | `feature/dokumentasi` | Pengerjaan dokumen SRS dan diagram | `docs/` |
@@ -1781,8 +1805,9 @@ flutter run --dart-define=API_URL=http://IP-LAPTOP:3001/api  # di perangkat fisi
 **Menjalankan website:**
 
 ```bash
+cd web
 npm install
-npm run dev
+npm run dev                   # situs berjalan di http://localhost:5173
 ```
 
 **Menjalankan seluruh pengujian:**
@@ -1854,7 +1879,8 @@ diperbarui dan dibangkitkan ulang bila rancangan berubah.
 | 29 | Berkas konfigurasi penyebaran website | Bab IV.5.5 |
 | 30 | Bukti penyebaran website | Bab IV.5.5 |
 | 31 | Struktur cabang Git dan berkas yang dikecualikan | Bab IV.5.7 |
-| 32 | Tautan repositori dan hasil deploy | Bab V.2.5 |
+| 32 | Berkas konfigurasi yang tetap di akar proyek | Bab IV.3.3 |
+| 33 | Tautan repositori dan hasil deploy | Bab V.2.5 |
 
 ### 5.2.5 Tautan dan Rujukan
 
@@ -1867,7 +1893,7 @@ diperbarui dan dibangkitkan ulang bila rancangan berubah.
 | Alamat API hasil deploy | *Belum tersedia — masih berjalan di `http://localhost:3001/api`* |
 | Host basis data | `pg-23410fb1-ghiffary-a1c7.a.aivencloud.com:10504`, database `vita_travel` (Aiven, PostgreSQL 18.7) |
 | Sertifikat CA basis data | `backend/certs/aiven-ca.pem` |
-| Berkas konfigurasi penyebaran | `netlify.toml`, `public/_redirects` |
+| Berkas konfigurasi penyebaran | `netlify.toml` (akar proyek), `web/public/_redirects` |
 | Dokumentasi API | `docs/API.md` |
 | Koleksi Postman | `docs/vita-travel.postman_collection.json` |
 | Dokumentasi basis data | `docs/ERD.md` |
