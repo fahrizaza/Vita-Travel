@@ -1,5 +1,5 @@
 import pg from "pg";
-import { DATABASE_URL } from "./config.js";
+import { DATABASE_URL, DATABASE_SSL } from "./config.js";
 
 // Secara default pg mengembalikan NUMERIC/COUNT sebagai string dan DATE sebagai objek Date.
 // Ubah agar angka menjadi number dan tanggal tetap teks "YYYY-MM-DD".
@@ -7,7 +7,7 @@ pg.types.setTypeParser(pg.types.builtins.NUMERIC, Number);
 pg.types.setTypeParser(pg.types.builtins.INT8, Number);
 pg.types.setTypeParser(pg.types.builtins.DATE, (value) => value);
 
-const pool = new pg.Pool({ connectionString: DATABASE_URL });
+const pool = new pg.Pool({ connectionString: DATABASE_URL, ssl: DATABASE_SSL });
 
 /**
  * Menjalankan beberapa query sebagai satu transaksi:
