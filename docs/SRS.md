@@ -16,8 +16,9 @@
 | Bentuk Soal | Individu |
 | Penyusun | Fahri |
 | Tanggal Penyusunan | 15 November 2026 |
-| Versi Dokumen | 1.1 |
+| Versi Dokumen | 1.2 |
 | Repositori | `https://github.com/fahrizaza/Vita-Travel` |
+| Basis Data Daring | Aiven for PostgreSQL (rincian pada Bab IV.5.3) |
 
 ---
 
@@ -169,7 +170,8 @@ benar-benar sesuai.
 | 10 | Dokumentasi | Dokumentasi teknis (`README`, `ALUR`, `API`, `ERD`) | 13 Nov 2026 | 13 Nov 2026 | 1 hari | Selesai |
 | 11 | Dokumentasi | Penyusunan dokumen SRS ini | 14 Nov 2026 | 14 Nov 2026 | 1 hari | Selesai |
 | 12 | Pengelolaan versi | Inisialisasi repositori Git dan penyusunan cabang | 15 Nov 2026 | 15 Nov 2026 | 1 hari | Selesai |
-| 13 | Penyebaran | Deploy website, API, dan basis data ke layanan daring | — | — | — | Belum dijalankan |
+| 13 | Penyebaran | Deploy basis data ke Aiven | 15 Nov 2026 | 15 Nov 2026 | 1 hari | Selesai |
+| 14 | Penyebaran | Deploy website dan REST API ke layanan daring | — | — | — | Belum dijalankan |
 
 ### 2.2.3 Catatan Pelaksanaan
 
@@ -180,9 +182,9 @@ penyusunan repositori Git pada 15 November 2026. Karena pengerjaan bersifat iter
 tidak menunggu seluruh implementasi selesai: setiap modul diuji begitu modul tersebut selesai
 dikerjakan.
 
-Baris terakhir tabel diberi status **belum dijalankan** karena penyebaran ke layanan daring memang
-belum dikerjakan. Baris tersebut sengaja ditampilkan agar pembaca dokumen dapat melihat bahwa satu
-tahap masih terbuka, bukan menghilangkannya dari rencana.
+Baris 13 berstatus **selesai** karena basis data memang sudah berjalan di Aiven dan sudah diuji
+sambungan serta isinya. Baris 14 sengaja dibiarkan berstatus **belum dijalankan** agar pembaca dokumen
+dapat melihat bahwa satu tahap masih terbuka, bukan menghilangkannya dari rencana.
 
 ---
 
@@ -1183,6 +1185,9 @@ PRELOVE/
 │   │   ├── seed.js              DML: akun uji dan data contoh
 │   │   ├── setup.js             npm run db:setup (buat database, schema, seed)
 │   │   └── seed-images/         Foto contoh untuk data awal
+│   ├── certs/
+│   │   ├── aiven-ca.pem         Sertifikat CA proyek Aiven untuk verifikasi SSL
+│   │   └── README.md            Cara mengunduh dan memasang CA tersebut
 │   ├── src/
 │   │   ├── server.js            Menjalankan server
 │   │   ├── app.js               Daftar middleware dan route
@@ -1297,6 +1302,10 @@ internalnya.
 
 Pengujian dijalankan terhadap API yang hidup pada `http://127.0.0.1:3001/api`. Setiap kasus mencatat
 kode status yang diharapkan dan kode status yang benar-benar diterima.
+
+Pengujian ini dijalankan dua kali: sekali ketika basis data masih berada di komputer pengembangan, dan
+sekali lagi setelah basis data dipindahkan ke Aiven (Bab IV.5.3). Keduanya menghasilkan hasil yang
+sama, 42 dari 42 kasus sesuai harapan.
 
 **Rekapitulasi: 42 kasus dijalankan, 42 sesuai harapan, 0 tidak sesuai.**
 
@@ -1416,15 +1425,20 @@ dinyatakan memenuhi syarat:
 
 ### 4.5.1 Status Deployment
 
-**Repositori Git sudah dibuat dan terisi.** Seluruh kode proyek tersimpan pada
-`https://github.com/fahrizaza/Vita-Travel`, dengan lima cabang: `main`, `develop`, dan tiga cabang
-fitur. Rinciannya pada Bab IV.5.7.
+Penyebaran dikerjakan bertahap, sehingga keadaannya per tanggal dokumen ini tidak sama untuk setiap
+komponen.
 
-**Penyebaran ke layanan daring belum dilakukan.** Sistem baru berjalan pada lingkungan pengembangan
-lokal; berkas konfigurasi penyebaran (`vercel.json`, `netlify.toml`) juga belum dibuat. Karena itu,
-subbab 4.5.2 sampai 4.5.6 berisi **rancangan dan langkah penyebaran yang akan dijalankan**, bukan
-dokumentasi hasil penyebaran. Subbab-subbab tersebut akan diperbarui dengan URL dan tangkapan layar
-setelah penyebaran benar-benar dikerjakan.
+| Komponen | Status | Keterangan |
+| --- | --- | --- |
+| Repositori Git | **Selesai** | `https://github.com/fahrizaza/Vita-Travel`, bercabang menurut modul, rincian pada Bab IV.5.7 |
+| Basis data PostgreSQL | **Selesai** | Berjalan di Aiven, sudah diuji sambungan dan isinya, rincian pada Bab IV.5.3 |
+| REST API | Belum | Masih berjalan di komputer pengembangan (`http://localhost:3001/api`) |
+| Website company profile | Belum | Berkas konfigurasi penyebaran (`vercel.json`, `netlify.toml`) belum dibuat |
+| Aplikasi mobile | Belum | APK belum dibangun dengan alamat API daring |
+
+Karena itu, subbab 4.5.4 sampai 4.5.6 masih berisi **rancangan langkah penyebaran**, sedangkan subbab
+4.5.3 sudah berisi **hasil yang benar-benar dikerjakan** beserta bukti pengujiannya. Subbab yang masih
+berisi rancangan akan diperbarui dengan URL dan tangkapan layar setelah dikerjakan.
 
 ### 4.5.2 Rancangan Arsitektur Deployment
 
@@ -1435,20 +1449,71 @@ setelah penyebaran benar-benar dikerjakan.
 | Basis data PostgreSQL | Aiven | Menyediakan PostgreSQL terkelola dengan pencadangan otomatis, dapat diakses dari luar jaringan lokal. |
 | Aplikasi mobile | Build APK atau Flutter web | Dibagikan langsung atau di-host sebagai aplikasi web. |
 
-### 4.5.3 Langkah Deploy Database ke Aiven
+Baris basis data pada tabel di atas sudah terwujud; baris lainnya masih berupa rencana.
 
-1. Membuat akun pada layanan Aiven, lalu membuat layanan baru berjenis **PostgreSQL**.
-2. Memilih wilayah terdekat (misalnya Singapura) untuk menekan waktu tanggap.
-3. Menyalin **Service URI** yang disediakan, dengan bentuk
-   `postgres://USER:PASSWORD@HOST:PORT/NAMA_DATABASE?sslmode=require`.
-4. Menyimpan URI tersebut sebagai nilai `DATABASE_URL` pada berkas `.env` di server, **tidak** pada
-   berkas yang ikut ke repositori.
-5. Menjalankan `npm run db:setup` dengan `DATABASE_URL` yang sudah diarahkan ke Aiven, sehingga tabel
-   dan data contoh terbuat di sana. Berkas `backend/database/schema.sql` dapat pula dijalankan langsung
-   melalui konsol SQL Aiven.
-6. Memastikan sambungan memakai SSL. PostgreSQL versi baru memperlakukan `sslmode=require` sebagai
-   permintaan verifikasi sertifikat penuh, sehingga konfigurasi SSL perlu ditulis eksplisit agar
-   sambungan ke Aiven diterima.
+### 4.5.3 Penyebaran Basis Data ke Aiven (Sudah Dikerjakan)
+
+Basis data sudah berjalan di **Aiven for PostgreSQL**, bukan lagi di komputer pengembangan.
+
+**A. Data layanan**
+
+| Item | Nilai |
+| --- | --- |
+| Penyedia | Aiven for PostgreSQL |
+| Host | `pg-23410fb1-ghiffary-a1c7.a.aivencloud.com` |
+| Port | `10504` |
+| Nama database | `vita_travel` |
+| Database bawaan | `defaultdb`, dipakai hanya saat membuat database baru |
+| Pengguna | `avnadmin` |
+| Versi server | PostgreSQL 18.7 |
+| Batas sambungan | 20 koneksi |
+| Kata sandi | Tersimpan pada `backend/.env`, **tidak ditulis** di dokumen ini maupun di repositori |
+
+**B. Langkah yang dikerjakan**
+
+1. Membuat layanan PostgreSQL pada Aiven, lalu menyalin **Service URI** beserta sertifikat CA-nya.
+2. Menyimpan URI tersebut sebagai `DATABASE_URL` pada `backend/.env`. Berkas ini dikecualikan oleh
+   `.gitignore`, sehingga kata sandi tidak ikut ke repositori.
+3. Menyimpan sertifikat CA sebagai `backend/certs/aiven-ca.pem`, lalu meneruskannya ke driver `pg`
+   sebagai `ssl.ca` supaya identitas server benar-benar diverifikasi.
+4. Menjalankan `npm run db:setup` dengan `DATABASE_URL` diarahkan ke Aiven. Perintah itu membuat
+   database `vita_travel`, menjalankan `backend/database/schema.sql` (8 tabel dan 5 tipe ENUM), lalu
+   mengisi data contoh. Skripnya mencoba database pemeliharaan `postgres` lebih dulu, lalu `defaultdb`,
+   karena Aiven tidak menyediakan database bernama `postgres`.
+5. Memastikan `TEST_DATABASE_URL` tetap menunjuk PostgreSQL lokal, sehingga `npm test` tidak pernah
+   menghapus isi basis data daring.
+
+**C. Kendala yang ditemukan dan penyelesaiannya**
+
+Driver `pg` menolak sambungan ke Aiven dengan pesan `self-signed certificate in certificate chain`.
+Penyebabnya bukan sertifikat yang salah, melainkan parameter `sslmode=require` yang ikut tersalin pada
+Service URI: pada `pg-connection-string` versi 2, parameter itu **menimpa** pengaturan `ssl` yang
+diberikan aplikasi, sehingga sertifikat CA yang sudah dipegang justru hilang tanpa peringatan.
+Penyelesaiannya, parameter `sslmode` dibuang dari URI di `backend/src/config.js`, dan pengaturan SSL
+sepenuhnya berasal dari sertifikat CA yang dibaca aplikasi.
+
+Perbedaan itu dibuktikan dengan percobaan memakai kata sandi yang sengaja salah. URI **dengan**
+`sslmode=require` berhenti pada tahap TLS, sedangkan URI **tanpa** parameter tersebut melewati TLS lalu
+berhenti pada tahap autentikasi (kode `28P01`). Artinya pada percobaan kedua sertifikat sudah
+terverifikasi dan yang tersisa hanyalah kata sandi.
+
+**D. Bukti sambungan dan isi basis data**
+
+| Pemeriksaan | Hasil |
+| --- | --- |
+| Verifikasi sertifikat | Lolos penuh terhadap CA proyek Aiven (TLSv1.3, TLS_AES_256_GCM_SHA384) |
+| Alamat server yang menjawab | `159.223.237.210`, bukan `localhost` |
+| Tabel | 8 tabel, sesuai rancangan |
+| Tipe ENUM | 5 tipe, sesuai rancangan |
+| Akun uji | 6 akun, seluruhnya berhasil login melalui REST API |
+| Data contoh | 4 kategori, 5 destinasi, 12 listing, 10 pesanan, 4 ulasan, 2 favorit |
+| Uji blackbox terhadap API yang menunjuk Aiven | 42 dari 42 kasus lulus |
+| Uji otomatis `npm test` | 22 dari 22 lulus, tetap memakai basis data lokal |
+
+Kemampuan menulis diuji secara terpisah dan sengaja tidak lewat API yang sedang diuji: sebuah kategori
+dibuat melalui REST API, baris itu dibaca kembali melalui sambungan langsung ke server Aiven, lalu
+dihapus lagi. Setelah seluruh pengujian, data contoh dikembalikan ke keadaan awal dengan menjalankan
+`npm run db:setup` sekali lagi, dan sisa data uji dipastikan nol.
 
 ### 4.5.4 Langkah Deploy REST API
 
@@ -1501,6 +1566,8 @@ proyek: **`https://github.com/fahrizaza/Vita-Travel`** (publik).
 | `feature/backend-api` | Pengerjaan REST API dan basis data | `backend/` |
 | `feature/mobile-app` | Pengerjaan aplikasi Flutter | `mobile/` |
 | `feature/dokumentasi` | Pengerjaan dokumen SRS dan diagram | `docs/` |
+| `feature/database-aiven` | Penyambungan aplikasi ke basis data daring | `backend/src/config.js`, `backend/src/db.js`, `backend/certs/` |
+| `fix/*` | Perbaikan yang ditemukan setelah pengujian | Berkas yang diperbaiki saja |
 
 **B. Alur kerja yang dijalankan**
 
@@ -1508,7 +1575,17 @@ proyek: **`https://github.com/fahrizaza/Vita-Travel`** (publik).
 2. Cabang `develop` dibuat dari `main` sebagai titik penggabungan.
 3. Setiap modul dikerjakan pada cabang fiturnya sendiri, lalu digabungkan ke `develop` dengan
    *merge commit* agar riwayat pengerjaan tiap modul tetap terbaca.
-4. Setelah seluruh modul selesai, `develop` digabungkan ke `main` dan diberi penanda versi `v1.0.0`.
+4. Setelah seluruh modul selesai, `develop` digabungkan ke `main` dan diberi penanda versi.
+5. Perbaikan yang muncul kemudian dikerjakan pada cabang `fix/*`, digabungkan ke `develop`, lalu naik
+   ke `main` sebagai versi berikutnya.
+
+Penanda versi yang sudah dibuat:
+
+| Penanda | Isi |
+| --- | --- |
+| `v1.0.0` | Sistem lengkap: website, REST API, aplikasi mobile, dan basis data |
+| `v1.1.0` | Perbaikan dokumen SRS setelah repositori Git dibuat |
+| `v1.2.0` | Dukungan basis data Aiven dan dokumen yang diselaraskan dengannya |
 
 Perintah yang dipakai:
 
@@ -1574,12 +1651,16 @@ dijalankan terhadap server yang benar-benar hidup, bukan terhadap pemanggilan fu
 Kode status 400, 401, 403, 404, 409, 413, dan 415 semuanya terpicu pada kondisi yang tepat, yang
 berarti validasi, autentikasi, otorisasi, dan aturan bisnis bekerja sebagaimana dirancang.
 
+Seluruh 42 kasus tersebut dijalankan ulang setelah basis data dipindahkan dari komputer pengembangan
+ke Aiven. Hasilnya tetap 42 dari 42 lulus, sehingga pemindahan basis data terbukti tidak mengubah
+perilaku sistem yang sudah diuji.
+
 **D. Pemenuhan Ketentuan Soal**
 
 | Ketentuan | Pemenuhan |
 | --- | --- |
 | Tema berkaitan dengan UMKM | Jasa travel: agen trip dan pemandu lokal |
-| Basis data MySQL atau PostgreSQL | PostgreSQL 18 |
+| Basis data MySQL atau PostgreSQL | PostgreSQL 18.7, berjalan di Aiven |
 | Backend Node.js dan Express dengan REST API | Express 5, 39 endpoint |
 | Aplikasi mobile Flutter yang mengonsumsi REST API | Flutter 3.44.7, 26 halaman |
 | Validasi di sisi backend dan antarmuka | zod di backend, validator di mobile |
@@ -1597,9 +1678,10 @@ berarti validasi, autentikasi, otorisasi, dan aturan bisnis bekerja sebagaimana 
 Dokumen ini juga mencatat secara terbuka apa yang belum dikerjakan, agar tidak menimbulkan kesan
 bahwa sistem sudah lengkap:
 
-1. Penyebaran sistem ke layanan daring **belum dikerjakan**. Rancangan langkahnya sudah disusun pada
-   Bab IV.5 dan menunggu pelaksanaan. Repositori Git sendiri sudah dibuat dan terisi pada
-   `https://github.com/fahrizaza/Vita-Travel`.
+1. Penyebaran **belum seluruhnya selesai**. Basis data sudah berjalan di Aiven dan sudah diuji
+   (Bab IV.5.3), dan repositori Git sudah terisi pada `https://github.com/fahrizaza/Vita-Travel`.
+   Namun REST API, website, dan aplikasi mobile masih berjalan di komputer pengembangan; rancangan
+   langkah untuk ketiganya tersedia pada Bab IV.5.4 sampai IV.5.6.
 2. Pembayaran masih dilakukan manual melalui transfer bank dan diverifikasi oleh seller. Pemrosesan
    pembayaran otomatis belum ada.
 3. Pengujian beban, pengujian keamanan oleh pihak ketiga, dan pengujian pada perangkat iOS maupun
@@ -1713,18 +1795,24 @@ diperbarui dan dibangkitkan ulang bila rancangan berubah.
 | 22 | Hasil uji blackbox (42 kasus) | Bab IV.4.2 |
 | 23 | Hasil uji otomatis | Bab IV.4.3 |
 | 24 | Pengujian yang belum dijalankan | Bab IV.4.4 |
-| 25 | Tautan repositori dan hasil deploy | Bab V.2.5 |
+| 25 | Status penyebaran tiap komponen | Bab IV.5.1 |
+| 26 | Rancangan arsitektur deployment | Bab IV.5.2 |
+| 27 | Data layanan basis data Aiven | Bab IV.5.3 |
+| 28 | Bukti sambungan dan isi basis data Aiven | Bab IV.5.3 |
+| 29 | Struktur cabang Git dan berkas yang dikecualikan | Bab IV.5.7 |
+| 30 | Tautan repositori dan hasil deploy | Bab V.2.5 |
 
 ### 5.2.5 Tautan dan Rujukan
 
 | Item | Keterangan |
 | --- | --- |
 | Repositori GitHub | `https://github.com/fahrizaza/Vita-Travel` (publik) |
-| Versi terilis | `v1.0.0` |
-| Cabang | `main`, `develop`, `feature/website-profil`, `feature/backend-api`, `feature/mobile-app`, `feature/dokumentasi` |
+| Versi terilis | `v1.0.0` untuk sistem, `v1.1.0` untuk dokumen SRS, `v1.2.0` untuk penyebaran basis data ke Aiven |
+| Cabang | `main`, `develop`, `feature/website-profil`, `feature/backend-api`, `feature/mobile-app`, `feature/dokumentasi`, `feature/database-aiven`, serta cabang `fix/*` untuk perbaikan |
 | Alamat website hasil deploy | *Belum tersedia — penyebaran belum dikerjakan* |
-| Alamat API hasil deploy | *Belum tersedia — penyebaran belum dikerjakan* |
-| Host basis data | *Belum tersedia — direncanakan Aiven* |
+| Alamat API hasil deploy | *Belum tersedia — masih berjalan di `http://localhost:3001/api`* |
+| Host basis data | `pg-23410fb1-ghiffary-a1c7.a.aivencloud.com:10504`, database `vita_travel` (Aiven, PostgreSQL 18.7) |
+| Sertifikat CA basis data | `backend/certs/aiven-ca.pem` |
 | Dokumentasi API | `docs/API.md` |
 | Koleksi Postman | `docs/vita-travel.postman_collection.json` |
 | Dokumentasi basis data | `docs/ERD.md` |
@@ -1772,6 +1860,7 @@ diperlihatkan melalui percobaan langsung oleh penguji.
 
 ---
 
-*Dokumen ini disusun berdasarkan kondisi nyata proyek pada 14 November 2026. Setiap angka yang
+*Dokumen ini disusun berdasarkan kondisi nyata proyek pada 15 November 2026. Setiap angka yang
 disebutkan — jumlah endpoint, jumlah tabel, jumlah kasus uji, dan ukuran kode — diambil dari
-pemeriksaan langsung terhadap berkas proyek, bukan dari perkiraan.*
+pemeriksaan langsung terhadap berkas proyek, bukan dari perkiraan. Bagian penyebaran basis data juga
+ditulis dari hasil pemeriksaan langsung terhadap server Aiven, bukan dari rancangan.*
