@@ -1,0 +1,12 @@
+flowchart TD
+    A([Mulai]) --> B[Buyer membuka<br/>detail listing]
+    B --> C{Sisa kuota<br/>masih ada?}
+    C -- Tidak --> D[Tampilkan pesan<br/>kuota penuh]
+    D --> Z([Selesai])
+    C -- Ya --> E[Isi jumlah peserta<br/>dan catatan]
+    E --> F{Data lolos<br/>validasi?}
+    F -- Tidak --> G[400 tampilkan<br/>error per field]
+    G --> E
+    F -- Ya --> H[Hitung total<br/>harga x peserta]
+    H --> I[(Simpan pesanan<br/>status pending_payment)]
+    I --> Z
