@@ -15,8 +15,9 @@
 | Level | Medium |
 | Bentuk Soal | Individu |
 | Penyusun | Fahri |
-| Tanggal Penyusunan | 14 November 2026 |
-| Versi Dokumen | 1.0 |
+| Tanggal Penyusunan | 15 November 2026 |
+| Versi Dokumen | 1.1 |
+| Repositori | `https://github.com/fahrizaza/Vita-Travel` |
 
 ---
 
@@ -167,14 +168,21 @@ benar-benar sesuai.
 | 9 | Pengujian | Uji blackbox alur lengkap melalui HTTP (42 kasus) | 13 Nov 2026 | 13 Nov 2026 | 1 hari | Selesai |
 | 10 | Dokumentasi | Dokumentasi teknis (`README`, `ALUR`, `API`, `ERD`) | 13 Nov 2026 | 13 Nov 2026 | 1 hari | Selesai |
 | 11 | Dokumentasi | Penyusunan dokumen SRS ini | 14 Nov 2026 | 14 Nov 2026 | 1 hari | Selesai |
+| 12 | Pengelolaan versi | Inisialisasi repositori Git dan penyusunan cabang | 15 Nov 2026 | 15 Nov 2026 | 1 hari | Selesai |
+| 13 | Penyebaran | Deploy website, API, dan basis data ke layanan daring | — | — | — | Belum dijalankan |
 
 ### 2.2.3 Catatan Pelaksanaan
 
 Jadwal di atas disusun berdasarkan keterangan waktu berkas (mtime) yang benar-benar tercatat pada
 proyek. Pekerjaan berlangsung dalam rentang **12 November 2026 pukul 17.40** hingga
-**13 November 2026 pukul 06.55**, dilanjutkan penyusunan dokumen pada 14 November 2026. Karena
-pengerjaan bersifat iteratif, tahap pengujian tidak menunggu seluruh implementasi selesai: setiap
-modul diuji begitu modul tersebut selesai dikerjakan.
+**13 November 2026 pukul 06.55**, dilanjutkan penyusunan dokumen pada 14 November 2026 dan
+penyusunan repositori Git pada 15 November 2026. Karena pengerjaan bersifat iteratif, tahap pengujian
+tidak menunggu seluruh implementasi selesai: setiap modul diuji begitu modul tersebut selesai
+dikerjakan.
+
+Baris terakhir tabel diberi status **belum dijalankan** karena penyebaran ke layanan daring memang
+belum dikerjakan. Baris tersebut sengaja ditampilkan agar pembaca dokumen dapat melihat bahwa satu
+tahap masih terbuka, bukan menghilangkannya dari rencana.
 
 ---
 
@@ -1205,6 +1213,9 @@ PRELOVE/
 │   ├── router.jsx               Peta alamat ke halaman
 │   └── styles/                  CSS: tema, tipografi, dan gaya komponen
 ├── public/                      Gambar, ikon, dan font website
+├── legacy/                      Ekspor Webflow asli, disimpan sebagai rujukan desain
+│   ├── html/, css/, js/         Halaman, gaya, dan skrip hasil ekspor
+│   └── assets/                  Gambar, ikon, dan font hasil ekspor
 ├── docs/
 │   ├── SRS.md                   Dokumen ini
 │   ├── SRS_Vita_Travel.docx     Dokumen ini dalam format Word
@@ -1212,9 +1223,12 @@ PRELOVE/
 │   ├── ERD.md                   Penjelasan basis data
 │   ├── ALUR.md                  Alur kerja dan struktur kode
 │   ├── erd.svg, erd.png         Gambar ERD
-│   ├── diagrams/                Sumber dan gambar semua diagram
+│   ├── diagrams/                Sumber Mermaid (.mmd) dan gambar (.png) semua diagram
+│   ├── screenshots/             Tangkapan layar aplikasi dan website untuk lampiran
+│   ├── tools/md_to_docx.py      Membangkitkan DOCX dari SRS.md
 │   └── vita-travel.postman_collection.json
 ├── README.md                    Cara menjalankan dan akun uji
+├── .gitignore                   Berkas yang tidak ikut ke repositori
 └── SOAL_AAS_KOKE_XI_RPL_2026_2027.docx
 ```
 
@@ -1248,6 +1262,16 @@ memerlukan perubahan pada berkas halaman.
 **Penamaan berkas yang menggambarkan isi.** Seluruh berkas diberi nama menurut fungsinya, misalnya
 `booking.controller.js`, `listing_detail_screen.dart`, dan `retreat-card.jsx`. Tidak ada berkas yang
 dinamai berdasarkan kode acak atau tanggal pembuatan.
+
+**Folder `legacy/` disimpan sebagai rujukan, bukan bagian sistem yang berjalan.** Isinya adalah
+ekspor mentah situs Webflow yang menjadi acuan desain website. Folder ini tidak dipakai saat build
+maupun saat API berjalan, dan sengaja tidak diformat ulang agar tampilan aslinya tetap dapat
+dibandingkan bila ada perbedaan desain yang perlu ditelusuri.
+
+**Berkas yang tidak ikut ke repositori diatur pada `.gitignore`.** Yang dikecualikan adalah berkas
+rahasia (`.env` berisi alamat basis data dan kunci token), folder dependensi (`node_modules`), hasil
+build (`dist`, `build`), serta folder unggahan pengguna. Yang tetap ikut adalah `backend/.env.example`
+sebagai contoh tanpa nilai rahasia, sehingga penguji dapat menyiapkan sendiri berkas `.env` miliknya.
 
 ## 4.4 Quality Assurance (Blackbox Testing)
 
@@ -1392,14 +1416,15 @@ dinyatakan memenuhi syarat:
 
 ### 4.5.1 Status Deployment
 
-Perlu dinyatakan secara jujur: **pada saat dokumen ini disusun, sistem belum di-deploy ke layanan
-daring.** Sistem baru berjalan pada lingkungan pengembangan lokal. Berkas konfigurasi penyebaran
-(`vercel.json`, `netlify.toml`) juga belum dibuat, dan repositori Git belum diinisialisasi pada folder
-proyek.
+**Repositori Git sudah dibuat dan terisi.** Seluruh kode proyek tersimpan pada
+`https://github.com/fahrizaza/Vita-Travel`, dengan lima cabang: `main`, `develop`, dan tiga cabang
+fitur. Rinciannya pada Bab IV.5.7.
 
-Karena itu, subbab ini berisi **rancangan dan langkah penyebaran** yang akan dijalankan, bukan
-dokumentasi hasil penyebaran. Bagian ini akan diperbarui dengan URL dan tangkapan layar setelah
-penyebaran benar-benar dilakukan.
+**Penyebaran ke layanan daring belum dilakukan.** Sistem baru berjalan pada lingkungan pengembangan
+lokal; berkas konfigurasi penyebaran (`vercel.json`, `netlify.toml`) juga belum dibuat. Karena itu,
+subbab 4.5.2 sampai 4.5.6 berisi **rancangan dan langkah penyebaran yang akan dijalankan**, bukan
+dokumentasi hasil penyebaran. Subbab-subbab tersebut akan diperbarui dengan URL dan tangkapan layar
+setelah penyebaran benar-benar dikerjakan.
 
 ### 4.5.2 Rancangan Arsitektur Deployment
 
@@ -1461,26 +1486,58 @@ Untuk sistem yang berjalan sesungguhnya, folder unggahan perlu dipindahkan ke la
 3. Sebagai alternatif, aplikasi dapat dibangun untuk web dengan `flutter build web`, lalu di-host
    sebagai situs statis.
 
-### 4.5.7 Rencana Pengelolaan Versi dengan Git
+### 4.5.7 Pengelolaan Versi dengan Git
 
-Sesuai ketentuan soal, perubahan kode dikelola melalui repositori Git dengan pencabangan. Rancangan
-alur kerjanya:
+Sesuai ketentuan soal, perubahan kode dikelola melalui repositori Git dengan pencabangan. Repositori
+proyek: **`https://github.com/fahrizaza/Vita-Travel`** (publik).
 
-| Cabang | Fungsi |
+**A. Struktur cabang yang dipakai**
+
+| Cabang | Fungsi | Isi |
+| --- | --- | --- |
+| `main` | Versi stabil dan siap diserahkan | Seluruh sistem, ditandai penanda versi `v1.0.0` |
+| `develop` | Penggabungan seluruh fitur sebelum masuk `main` | Seluruh sistem, titik lanjut pengerjaan berikutnya |
+| `feature/website-profil` | Pengerjaan website company profile | `src/`, `public/`, `legacy/`, berkas Vite |
+| `feature/backend-api` | Pengerjaan REST API dan basis data | `backend/` |
+| `feature/mobile-app` | Pengerjaan aplikasi Flutter | `mobile/` |
+| `feature/dokumentasi` | Pengerjaan dokumen SRS dan diagram | `docs/` |
+
+**B. Alur kerja yang dijalankan**
+
+1. `main` dimulai dengan kerangka repositori: `.gitignore`, aturan Prettier dan oxlint, serta `README`.
+2. Cabang `develop` dibuat dari `main` sebagai titik penggabungan.
+3. Setiap modul dikerjakan pada cabang fiturnya sendiri, lalu digabungkan ke `develop` dengan
+   *merge commit* agar riwayat pengerjaan tiap modul tetap terbaca.
+4. Setelah seluruh modul selesai, `develop` digabungkan ke `main` dan diberi penanda versi `v1.0.0`.
+
+Perintah yang dipakai:
+
+```bash
+git checkout -b feature/backend-api develop    # mulai cabang fitur
+git checkout develop && git merge --no-ff feature/backend-api
+git tag -a v1.0.0 -m "Vita Travel v1.0.0"      # tandai versi rilis
+git push origin --all && git push origin --tags
+```
+
+Penggabungan memakai `--no-ff` (bukan *fast-forward*) dengan alasan: riwayat menjadi bercabang
+sehingga terlihat jelas modul mana yang dikerjakan pada cabang mana. Tanpa opsi itu, riwayat akan
+tampak berurutan seolah seluruh pekerjaan dilakukan sekaligus di satu cabang, dan pertanyaan seperti
+"perubahan ini masuk lewat fitur apa" tidak lagi dapat dijawab dari riwayat.
+
+**C. Berkas yang tidak ikut ke repositori**
+
+| Dikecualikan | Alasan |
 | --- | --- |
-| `main` | Berisi versi yang sudah stabil dan siap diserahkan |
-| `develop` | Menampung penggabungan seluruh fitur sebelum masuk ke `main` |
-| `feature/backend-api` | Pengerjaan REST API dan basis data |
-| `feature/mobile-app` | Pengerjaan aplikasi Flutter |
-| `feature/website` | Pengerjaan website company profile |
-| `fix/nama-perbaikan` | Perbaikan cacat yang ditemukan saat pengujian |
+| `.env`, `.env.*` | Memuat alamat basis data dan kunci token yang bersifat rahasia |
+| `node_modules/` | Dependensi dapat dipasang ulang dengan `npm install` |
+| `dist/`, `build/` | Hasil build, dapat dibangun ulang dan ukurannya besar |
+| `uploads/`, `uploads-test/` | Berkas unggahan pengguna, bukan bagian kode |
+| `.DS_Store`, `.idea/`, `.vscode/*` | Berkas sistem operasi dan editor |
+| `.vibecode/`, `.impeccable/` | Cache perkakas lokal |
 
-Alur kerja: membuat cabang fitur dari `develop`, mengerjakan perubahan di cabang tersebut, mengajukan
-permintaan penggabungan ke `develop`, dan setelah diuji barulah `develop` digabungkan ke `main` dan
-diberi penanda versi.
-
-Hal-hal yang tidak ikut ke dalam repositori: berkas `.env` (memuat rahasia), folder `node_modules`,
-folder hasil build (`dist`, `build`), dan folder unggahan berisi berkas pengguna.
+Yang **tetap** ikut meski berkaitan dengan rahasia adalah `backend/.env.example`: berkas itu hanya
+memuat nama variabel beserta contoh nilainya, tanpa nilai sebenarnya, sehingga penguji dapat
+menyiapkan `.env` miliknya sendiri.
 
 ---
 
@@ -1540,8 +1597,9 @@ berarti validasi, autentikasi, otorisasi, dan aturan bisnis bekerja sebagaimana 
 Dokumen ini juga mencatat secara terbuka apa yang belum dikerjakan, agar tidak menimbulkan kesan
 bahwa sistem sudah lengkap:
 
-1. Sistem **belum di-deploy** ke layanan daring dan repositori Git **belum dibuat**. Rancangan
-   langkahnya sudah disusun pada Bab IV.5 dan menunggu pelaksanaan.
+1. Penyebaran sistem ke layanan daring **belum dikerjakan**. Rancangan langkahnya sudah disusun pada
+   Bab IV.5 dan menunggu pelaksanaan. Repositori Git sendiri sudah dibuat dan terisi pada
+   `https://github.com/fahrizaza/Vita-Travel`.
 2. Pembayaran masih dilakukan manual melalui transfer bank dan diverifikasi oleh seller. Pemrosesan
    pembayaran otomatis belum ada.
 3. Pengujian beban, pengujian keamanan oleh pihak ketiga, dan pengujian pada perangkat iOS maupun
@@ -1655,15 +1713,17 @@ diperbarui dan dibangkitkan ulang bila rancangan berubah.
 | 22 | Hasil uji blackbox (42 kasus) | Bab IV.4.2 |
 | 23 | Hasil uji otomatis | Bab IV.4.3 |
 | 24 | Pengujian yang belum dijalankan | Bab IV.4.4 |
-| 25 | Tautan repositori dan hasil deploy | Bab IV.5 |
+| 25 | Tautan repositori dan hasil deploy | Bab V.2.5 |
 
 ### 5.2.5 Tautan dan Rujukan
 
 | Item | Keterangan |
 | --- | --- |
-| Repositori GitHub | *Belum tersedia — akan diisi setelah repositori dibuat* |
-| Alamat website hasil deploy | *Belum tersedia* |
-| Alamat API hasil deploy | *Belum tersedia* |
+| Repositori GitHub | `https://github.com/fahrizaza/Vita-Travel` (publik) |
+| Versi terilis | `v1.0.0` |
+| Cabang | `main`, `develop`, `feature/website-profil`, `feature/backend-api`, `feature/mobile-app`, `feature/dokumentasi` |
+| Alamat website hasil deploy | *Belum tersedia — penyebaran belum dikerjakan* |
+| Alamat API hasil deploy | *Belum tersedia — penyebaran belum dikerjakan* |
 | Host basis data | *Belum tersedia — direncanakan Aiven* |
 | Dokumentasi API | `docs/API.md` |
 | Koleksi Postman | `docs/vita-travel.postman_collection.json` |
