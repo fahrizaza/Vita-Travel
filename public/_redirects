@@ -1,0 +1,11 @@
+# Aplikasi ini memakai React Router, yang menangani perpindahan halaman di sisi peramban.
+# Akibatnya alamat seperti /retreat atau /bali tidak punya berkasnya sendiri di folder hasil
+# build, padahal halamannya jelas ada di dalam aplikasi.
+#
+# Aturan di bawah mengarahkan semua alamat ke index.html dengan kode 200 (bukan 301, yang
+# akan mengubah alamat di bilah peramban). Tanpa aturan ini, membuka alamat tersebut secara
+# langsung atau menyegarkan halaman pada alamat itu akan dijawab 404 oleh server.
+#
+# Berkas ini disalin Vite dari public/ ke dist/, sehingga selalu ikut pada setiap penyebaran,
+# baik lewat CLI maupun lewat repositori.
+/*  /index.html  200

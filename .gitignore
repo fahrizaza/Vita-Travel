@@ -32,3 +32,9 @@ npm-debug.log*
 # ---------- Perkakas lokal ----------
 .vibecode/
 .impeccable/
+
+# ---------- Status penyebaran ----------
+# Dibuat Netlify/Vercel saat folder ini ditautkan ke sebuah proyek. Isinya hanya
+# penanda proyek mana yang dipakai, dan berbeda antar komputer.
+.netlify/
+.vercel/
