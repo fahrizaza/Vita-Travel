@@ -16,7 +16,8 @@
 | Bentuk Soal | Individu |
 | Penyusun | Fahri |
 | Tanggal Penyusunan | 15 November 2026 |
-| Versi Dokumen | 1.4 |
+| Tanggal Revisi | 16 November 2026 |
+| Versi Dokumen | 1.4.1 |
 | Repositori | `https://github.com/fahrizaza/Vita-Travel` |
 | Website Daring | `https://vita-travel.netlify.app` (rincian pada Bab IV.5.5) |
 | Basis Data Daring | Aiven for PostgreSQL (rincian pada Bab IV.5.3) |
@@ -180,8 +181,9 @@ benar-benar sesuai.
 
 Jadwal di atas disusun berdasarkan keterangan waktu berkas (mtime) yang benar-benar tercatat pada
 proyek. Pekerjaan berlangsung dalam rentang **12 November 2026 pukul 17.40** hingga
-**13 November 2026 pukul 06.55**, dilanjutkan penyusunan dokumen pada 14 November 2026 dan
-penyusunan repositori Git pada 15 November 2026. Karena pengerjaan bersifat iteratif, tahap pengujian
+**13 November 2026 pukul 06.55**, dilanjutkan penyusunan dokumen pada 14 November 2026,
+penyusunan repositori Git dan penataan ulang struktur pada 15 November 2026, serta penyelarasan
+dokumen pada 16 November 2026. Karena pengerjaan bersifat iteratif, tahap pengujian
 tidak menunggu seluruh implementasi selesai: setiap modul diuji begitu modul tersebut selesai
 dikerjakan.
 
@@ -1190,6 +1192,8 @@ PRELOVE/
 │   │   ├── pages/               Halaman home dan halaman paket perjalanan
 │   │   ├── animations/          Animasi GSAP
 │   │   ├── data/                Isi paket perjalanan dan daftar pemandu
+│   │   ├── hooks/               Hook React: media query, gulir, tinggi seragam
+│   │   ├── lib/                 Helper: penggabung nama kelas dan gulir halus
 │   │   ├── router.jsx           Peta alamat ke halaman
 │   │   └── styles/              CSS: tema, tipografi, dan gaya komponen
 │   ├── public/                  Gambar, ikon, dan font yang dilayani apa adanya
@@ -1636,13 +1640,15 @@ proyek: **`https://github.com/fahrizaza/Vita-Travel`** (publik).
 
 | Cabang | Fungsi | Isi |
 | --- | --- | --- |
-| `main` | Versi stabil dan siap diserahkan | Seluruh sistem, ditandai penanda versi `v1.0.0` |
+| `main` | Versi stabil dan siap diserahkan | Seluruh sistem, diberi penanda versi rilis; terakhir `v1.4.1` |
 | `develop` | Penggabungan seluruh fitur sebelum masuk `main` | Seluruh sistem, titik lanjut pengerjaan berikutnya |
 | `feature/website-profil` | Pengerjaan website company profile | `web/`, `legacy/` |
 | `feature/backend-api` | Pengerjaan REST API dan basis data | `backend/` |
 | `feature/mobile-app` | Pengerjaan aplikasi Flutter | `mobile/` |
 | `feature/dokumentasi` | Pengerjaan dokumen SRS dan diagram | `docs/` |
 | `feature/database-aiven` | Penyambungan aplikasi ke basis data daring | `backend/src/config.js`, `backend/src/db.js`, `backend/certs/` |
+| `feature/deploy-website` | Penyebaran website ke Netlify | `netlify.toml`, `web/public/_redirects` |
+| `refactor/pisahkan-web` | Penataan ulang struktur folder | Pemindahan berkas website dari akar proyek ke `web/` |
 | `fix/*` | Perbaikan yang ditemukan setelah pengujian | Berkas yang diperbaiki saja |
 
 **B. Alur kerja yang dijalankan**
@@ -1662,6 +1668,9 @@ Penanda versi yang sudah dibuat:
 | `v1.0.0` | Sistem lengkap: website, REST API, aplikasi mobile, dan basis data |
 | `v1.1.0` | Perbaikan dokumen SRS setelah repositori Git dibuat |
 | `v1.2.0` | Dukungan basis data Aiven dan dokumen yang diselaraskan dengannya |
+| `v1.3.0` | Penyebaran website ke Netlify beserta bukti pengujiannya |
+| `v1.4.0` | Penataan ulang struktur: website dipindahkan ke folder `web/` |
+| `v1.4.1` | Penyelarasan daftar penanda versi dan urutan daftar tabel pada dokumen |
 
 Perintah yang dipakai:
 
@@ -1869,17 +1878,17 @@ diperbarui dan dibangkitkan ulang bila rancangan berubah.
 | 19 | Ringkasan tabel basis data | Bab IV.2.2 |
 | 20 | Aturan integritas data | Bab IV.2.2 |
 | 21 | Ukuran proyek | Bab IV.3.2 |
-| 22 | Hasil uji blackbox (42 kasus) | Bab IV.4.2 |
-| 23 | Hasil uji otomatis | Bab IV.4.3 |
-| 24 | Pengujian yang belum dijalankan | Bab IV.4.4 |
-| 25 | Status penyebaran tiap komponen | Bab IV.5.1 |
-| 26 | Rancangan arsitektur deployment | Bab IV.5.2 |
-| 27 | Data layanan basis data Aiven | Bab IV.5.3 |
-| 28 | Bukti sambungan dan isi basis data Aiven | Bab IV.5.3 |
-| 29 | Berkas konfigurasi penyebaran website | Bab IV.5.5 |
-| 30 | Bukti penyebaran website | Bab IV.5.5 |
-| 31 | Struktur cabang Git dan berkas yang dikecualikan | Bab IV.5.7 |
-| 32 | Berkas konfigurasi yang tetap di akar proyek | Bab IV.3.3 |
+| 22 | Berkas konfigurasi yang tetap di akar proyek | Bab IV.3.3 |
+| 23 | Hasil uji blackbox (42 kasus) | Bab IV.4.2 |
+| 24 | Hasil uji otomatis | Bab IV.4.3 |
+| 25 | Pengujian yang belum dijalankan | Bab IV.4.4 |
+| 26 | Status penyebaran tiap komponen | Bab IV.5.1 |
+| 27 | Rancangan arsitektur deployment | Bab IV.5.2 |
+| 28 | Data layanan basis data Aiven | Bab IV.5.3 |
+| 29 | Bukti sambungan dan isi basis data Aiven | Bab IV.5.3 |
+| 30 | Berkas konfigurasi penyebaran website | Bab IV.5.5 |
+| 31 | Bukti penyebaran website | Bab IV.5.5 |
+| 32 | Struktur cabang Git dan berkas yang dikecualikan | Bab IV.5.7 |
 | 33 | Tautan repositori dan hasil deploy | Bab V.2.5 |
 
 ### 5.2.5 Tautan dan Rujukan
@@ -1887,8 +1896,8 @@ diperbarui dan dibangkitkan ulang bila rancangan berubah.
 | Item | Keterangan |
 | --- | --- |
 | Repositori GitHub | `https://github.com/fahrizaza/Vita-Travel` (publik) |
-| Versi terilis | `v1.0.0` sistem, `v1.1.0` dokumen, `v1.2.0` basis data Aiven, `v1.3.0` penyebaran website |
-| Cabang | `main`, `develop`, `feature/website-profil`, `feature/backend-api`, `feature/mobile-app`, `feature/dokumentasi`, `feature/database-aiven`, `feature/deploy-website`, serta cabang `fix/*` untuk perbaikan |
+| Versi terilis | `v1.0.0` sistem, `v1.1.0` dokumen, `v1.2.0` basis data Aiven, `v1.3.0` penyebaran website, `v1.4.0` penataan struktur, `v1.4.1` penyelarasan dokumen |
+| Cabang | `main`, `develop`, `feature/website-profil`, `feature/backend-api`, `feature/mobile-app`, `feature/dokumentasi`, `feature/database-aiven`, `feature/deploy-website`, `refactor/pisahkan-web`, serta cabang `fix/*` untuk perbaikan |
 | **Alamat website (daring)** | **`https://vita-travel.netlify.app`** — sudah berjalan, seluruh halaman diuji |
 | Alamat API hasil deploy | *Belum tersedia — masih berjalan di `http://localhost:3001/api`* |
 | Host basis data | `pg-23410fb1-ghiffary-a1c7.a.aivencloud.com:10504`, database `vita_travel` (Aiven, PostgreSQL 18.7) |
@@ -1943,7 +1952,8 @@ diperlihatkan melalui percobaan langsung oleh penguji.
 
 ---
 
-*Dokumen ini disusun berdasarkan kondisi nyata proyek pada 15 November 2026. Setiap angka yang
+*Dokumen ini disusun berdasarkan kondisi nyata proyek pada 15 November 2026 dan diselaraskan
+kembali dengan keadaan repositori pada 16 November 2026. Setiap angka yang
 disebutkan — jumlah endpoint, jumlah tabel, jumlah kasus uji, dan ukuran kode — diambil dari
 pemeriksaan langsung terhadap berkas proyek, bukan dari perkiraan. Bagian penyebaran basis data juga
 ditulis dari hasil pemeriksaan langsung terhadap server Aiven, bukan dari rancangan.*
